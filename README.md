@@ -43,3 +43,9 @@ Mem:           3.6Gi       1.0Gi       2.3Gi        54Mi       577Mi       2.6Gi
 
 # Contributing
 I am always open to suggestions and collaboration to improve SysMon Pro. If you have any ideas, feedback, or would like to contribute to the project, please feel free to reach out or submit a pull request.
+
+## Support
+
+Thanks for visiting my repository! If you find my work useful, please consider buying me a coffee to support my future projects.
+
+<a href="https://buymeacoffee.com/reek_elderblood?new=1" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
