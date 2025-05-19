@@ -1,40 +1,39 @@
 #!/bin/bash
 
 # Define colors for output
-RED='\033[0;91m'    # Red
-GREEN='\033[0;92m'  # Green
-YELLOW='\033[0;93m' # Yellow
-BLUE='\033[0;94m'   # Blue
-CYAN='\033[0;96m'   # Cyan
-MAGENTA='\033[0;95m' # Magenta
-NC='\033[0m'        # No Color
+RED='\033[0;91m'
+GREEN='\033[0;92m'
+YELLOW='\033[0;93m'
+BLUE='\033[0;94m'
+CYAN='\033[0;96m'
+MAGENTA='\033[0;95m'
+NC='\033[0m' # No Color
 
 # Function to display disk usage
 disk_usage() {
-    echo -e "${BLUE}==================== Disk Usage ====================${NC}\n"
-    echo -e "${GREEN}$(df -h)${NC}"
+    echo -e "\n${BLUE}==========[ Disk Usage ]==========${NC}"
+    df -h | grep -v tmpfs | awk '{print $0}' | column -t | sed "s/^/${GREEN}/;s/$/${NC}/"
 }
 
 # Function to display CPU usage
 cpu_usage() {
-    echo -e "\n${CYAN}==================== CPU Usage =====================${NC}\n"
-    echo -e "${YELLOW}$(top -bn1 | grep "Cpu(s)")${NC}"
+    echo -e "\n${CYAN}==========[ CPU Load ]==========${NC}"
+    top -bn1 | grep "Cpu(s)" | awk '{print "CPU Load: " $2 "% user, " $4 "% sys, " $8 "% idle"}' | sed "s/^/${YELLOW}/;s/$/${NC}/"
 }
 
 # Function to display RAM usage
 ram_usage() {
-    echo -e "\n${GREEN}==================== RAM Usage =====================${NC}\n"
-    echo -e "${MAGENTA}$(free -h)${NC}"
+    echo -e "\n${MAGENTA}==========[ RAM Usage ]==========${NC}"
+    free -h | awk '{print $0}' | column -t | sed "s/^/${GREEN}/;s/$/${NC}/"
 }
 
 # Function to display the kernel version
 kernel_name() {
-    echo -e "\n${YELLOW}==================== Kernel Version ==================${NC}\n"
-    echo -e "${BLUE}Kernel Versions : $(uname -r)${NC}"
-    echo -e "\n"
+    echo -e "\n${YELLOW}==========[ Kernel Version ]==========${NC}"
+    echo -e "${BLUE}Kernel Version: $(uname -r)${NC}"
 }
 
-# Function to check all information
+# Function to check all
 check_all() {
     disk_usage
     cpu_usage
@@ -44,26 +43,27 @@ check_all() {
 
 # Function to display the menu
 menu() {
-    echo -ne "
-
-${BLUE}1) Disk Usage
-${CYAN}2) CPU Load
-${GREEN}3) RAM Usage
-${YELLOW}4) Kernel Version
-${MAGENTA}5) Check All
-${RED}0) Exit${NC}
+    while true; do
+        echo -e "
+${BLUE}1)${NC} Disk Usage
+${CYAN}2)${NC} CPU Load
+${GREEN}3)${NC} RAM Usage
+${YELLOW}4)${NC} Kernel Version
+${MAGENTA}5)${NC} Check All
+${RED}0)${NC} Exit
 "
-    read -r -p "Choose an option: " choice
-    case $choice in
-        1) disk_usage ; menu;;
-        2) cpu_usage ; menu;;
-        3) ram_usage ; menu;;
-        4) kernel_name ; menu;;
-        5) check_all ; menu;;
-        0) exit 0 ;;
-        *) echo -e "${RED}Wrong option.${NC}";;
-    esac
+        read -r -p "Choose an option: " choice
+        case $choice in
+            1) disk_usage ;;
+            2) cpu_usage ;;
+            3) ram_usage ;;
+            4) kernel_name ;;
+            5) check_all ;;
+            0) echo -e "${RED}Exiting...${NC}"; break ;;
+            *) echo -e "${RED}Invalid option. Please try again.${NC}" ;;
+        esac
+    done
 }
 
-# Initial call to the menu function
+# Run menu
 menu
